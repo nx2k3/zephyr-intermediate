@@ -1,0 +1,8 @@
+*** Booting Zephyr OS build v4.4.0 ***
+[00:00:00.000,000] <inf> demo: === L2 Task 1: Synchronization and Shared‚State Safety ===
+[00:00:00.000,000] <inf> demo: Final expected value: 2000000
+[00:00:38.459,000] <inf> demo: [worker_a] finished
+[00:00:38.459,000] <inf> demo: [worker_b] finished
+[00:00:38.459,000] <inf> demo: Final value got: 2000000
+[00:00:38.460,000] <wrn> demo: No race this run
+[00:00:38.460,000] <inf> demo: Execution time: 38460 ms

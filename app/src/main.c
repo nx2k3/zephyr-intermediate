@@ -4,27 +4,34 @@
 LOG_MODULE_REGISTER(demo, LOG_LEVEL_DBG);
 
 #define STACK_SIZE (1024U)
-#define INCREMENTS (100000U)
+#define INCREMENTS (1000000U)
 #define PRIO       (6)
 
 static volatile uint32_t counter;
 static struct k_sem done_sem;
-static K_MUTEX_DEFINE(counter_mutex);
+#define USE_MUTEX
 
+#ifdef USE_MUTEX
+static K_MUTEX_DEFINE(counter_mutex);
+#endif
 void worker_fn(void *p1, void *p2, void *p3)
 {
 	const char *name = k_thread_name_get(k_current_get());
 
 	for (int i = 0; i < INCREMENTS; i++) {
+#ifdef USE_MUTEX
 		k_mutex_lock(&counter_mutex, K_FOREVER);
+#endif
 		counter++;
+		// LOG_INF("%d %s", counter, name);
+#ifdef USE_MUTEX
 		k_mutex_unlock(&counter_mutex);
+#endif
 	}
 
 	LOG_INF("[%s] finished", name);
 	k_sem_give(&done_sem);
 }
-
 K_THREAD_DEFINE(worker_a, STACK_SIZE, worker_fn, NULL, NULL, NULL, PRIO, 0, 0);
 K_THREAD_DEFINE(worker_b, STACK_SIZE, worker_fn, NULL, NULL, NULL, PRIO, 0, 0);
 
